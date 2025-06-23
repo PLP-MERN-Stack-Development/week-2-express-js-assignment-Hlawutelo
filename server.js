@@ -5,6 +5,7 @@ const productRoutes = require('./routes/productRoutes');
 const logger = require('./middleware/logger');
 const authMiddleware = require('./middleware/authMiddleware');
 const errorHandler = require('./middleware/errorHandler');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -22,10 +23,18 @@ app.get('/', (req, res) => {
 app.use(authMiddleware);
 
 // ✅ API routes
-app.use('/api/products', productRoutes);
+app.use('/api/products', authMiddleware, productRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/productsdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error('MongoDB connection error:', err));
 
 // Start server
 const PORT = process.env.PORT || 3000;

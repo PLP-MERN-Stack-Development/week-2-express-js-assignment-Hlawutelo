@@ -1,12 +1,11 @@
-class Product {
-  constructor(id, name, category, price, description = '', inStock = true) {
-    this.id = id;
-    this.name = name;
-    this.category = category;
-    this.price = price;
-    this.description = description;
-    this.inStock = inStock;
-  }
-}
+const mongoose = require('mongoose');
 
-module.exports = Product;
+const productSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  category: String,
+  inStock: Boolean,
+});
+
+module.exports = mongoose.model('Product', productSchema);
